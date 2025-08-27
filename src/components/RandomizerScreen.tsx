@@ -1,4 +1,9 @@
 import React, { useState, useCallback } from "react";
+import {
+  buttonPrimary,
+  buttonSecondary,
+  containerBase,
+} from "../styles/commonStyles";
 import { RpgLists, RpgItem } from "../types/rpgTypes";
 
 interface RandomizerScreenProps {
@@ -119,37 +124,51 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
   }, [currentListName, allRpgLists, showModal]);
 
   return (
-    <div id="randomizer-screen" className="flex flex-col items-center p-4">
+    <div id="randomizer-screen" className={containerBase}>
       <h2
         id="currentListNameTitle"
-        className="text-2xl font-bold text-gray-700 mb-4 text-center"
+        className="sm:text-2xl text-xl font-bold text-gray-700 mb-4 text-center"
       >
         {currentListName}
       </h2>
-      <p className="text-gray-600 mb-4 text-center">
+      <p className="text-gray-600 mb-4 text-center text-base sm:text-lg">
         Clique para sortear um item ou edite a lista.
       </p>
       <button
         onClick={randomizeItem}
-        className="w-full bg-purple-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75 shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 mb-4"
+        className={
+          buttonPrimary +
+          " mb-4 text-base sm:text-lg bg-purple-600 hover:bg-purple-700 focus:ring-purple-500"
+        }
       >
         Sortear Item!
       </button>
-      <div id="resultDisplay" className={resultDisplayClass}>
-        <p className="text-2xl font-extrabold" id="resultText">
+      <div
+        id="resultDisplay"
+        className={resultDisplayClass + " text-center overflow-x-auto"}
+        role={resultText.startsWith("Erro") ? "alert" : undefined}
+      >
+        <p className="text-2xl sm:text-3xl font-extrabold" id="resultText">
           {resultText}
         </p>
       </div>
       <button
         onClick={onEditList}
-        className="w-full bg-gray-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75 shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 mt-6"
+        className={buttonSecondary + " mt-6 text-base sm:text-lg"}
+        aria-label="Editar lista"
       >
+        <span className="sr-only">Editar lista</span>
         Editar Lista
       </button>
       <button
         onClick={onBackToLists}
-        className="w-full bg-gray-400 text-white font-bold py-3 px-6 rounded-xl hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 mt-4"
+        className={
+          buttonSecondary +
+          " mt-4 text-base sm:text-lg bg-gray-400 hover:bg-gray-500 focus:ring-gray-400"
+        }
+        aria-label="Voltar para listas"
       >
+        <span className="sr-only">Voltar para listas</span>
         Voltar para Listas
       </button>
     </div>

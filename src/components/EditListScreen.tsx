@@ -1,4 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
+import {
+  buttonPrimary,
+  buttonDanger,
+  buttonSuccess,
+  inputBase,
+  inputSmall,
+  containerBase,
+  cardBase,
+} from "../styles/commonStyles";
 import { RpgLists, RpgItem } from "../types/rpgTypes";
 
 interface EditListScreenProps {
@@ -169,7 +178,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
   };
 
   return (
-    <div id="edit-list-screen" className="flex flex-col items-center p-4">
+    <div id="edit-list-screen" className={containerBase}>
       <h2
         id="editListNameTitle"
         className="text-2xl font-bold text-gray-700 mb-4 text-center"
@@ -180,7 +189,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
         Edite os itens da lista, incluindo o peso para sorteio ponderado.
       </p>
 
-      <div className="w-full bg-gray-50 p-4 rounded-xl shadow-inner mb-6 space-y-4">
+      <div className={cardBase + " mb-6 space-y-4 bg-gray-50 shadow-inner"}>
         <div className="flex flex-col">
           <label
             htmlFor="singleAddItemInput"
@@ -188,11 +197,13 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
           >
             Adicionar Item:
           </label>
-          <div className="flex space-x-2">
+          <div className="flex items-center mb-2 gap-2">
             <input
               type="text"
               id="singleAddItemInput"
-              className="flex-grow p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400 transition-all duration-200"
+              className={
+                "flex-grow p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400 transition-all duration-200 text-base sm:text-lg"
+              }
               placeholder="Nome do novo item"
               value={singleAddItemInput}
               onChange={(e) => setSingleAddItemInput(e.target.value)}
@@ -200,16 +211,33 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
             <input
               type="number"
               min="1"
-              className="w-20 p-3 border-2 border-gray-300 rounded-xl"
+              className="w-20 p-3 border-2 border-gray-300 rounded-xl text-base sm:text-lg"
               placeholder="Peso"
               value={singleAddItemPeso}
               onChange={(e) => setSingleAddItemPeso(e.target.value)}
             />
             <button
               onClick={handleAddSingleItem}
-              className="bg-blue-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition-all duration-200"
+              className="ml-2 flex items-center justify-center bg-blue-600 text-white rounded-xl p-2 hover:bg-blue-700 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition-all duration-200"
+              style={{ width: 40, height: 40 }}
+              aria-label="Adicionar item"
             >
-              Adicionar
+              <span className="sr-only">Adicionar</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <title>Adicionar</title>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
             </button>
           </div>
         </div>
@@ -224,7 +252,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
           <div className="flex space-x-2">
             <select
               id="listReferenceSelect"
-              className="flex-grow p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 bg-white transition-all duration-200"
+              className={`flex-grow ${inputBase} bg-white`}
               value={listReferenceSelect}
               onChange={(e) => setListReferenceSelect(e.target.value)}
             >
@@ -232,7 +260,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
             </select>
             <button
               onClick={handleAddListReference}
-              className="bg-blue-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition-all duration-200"
+              className={buttonPrimary + " px-4"}
             >
               Adicionar REF
             </button>
@@ -264,13 +292,13 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
       </div>
 
       {activeTab === "visual" && (
-        <div className="w-full mb-6">
-          <table className="w-full text-left border-collapse">
+        <div className="w-full mb-6 overflow-x-auto">
+          <table className="w-full text-left border-collapse min-w-[320px] max-w-full">
             <thead>
               <tr>
-                <th className="p-2 border-b">Nome</th>
-                <th className="p-2 border-b">Peso</th>
-                <th className="p-2 border-b">Ações</th>
+                <th className="p-2 border-b text-base sm:text-lg">Nome</th>
+                <th className="p-2 border-b text-base sm:text-lg">Peso</th>
+                <th className="p-2 border-b text-base sm:text-lg">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -279,7 +307,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
                   <td className="p-2 border-b">
                     <input
                       type="text"
-                      className="w-full p-2 border rounded-lg"
+                      className="w-full p-3 min-h-[44px] border rounded-lg text-base sm:text-lg"
                       value={item.nome}
                       onChange={(e) => {
                         const value = e.target.value;
@@ -295,7 +323,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
                     <input
                       type="number"
                       min="1"
-                      className="w-20 p-2 border rounded-lg"
+                      className="w-20 p-3 min-h-[44px] border rounded-lg text-base sm:text-lg"
                       value={item.peso === undefined ? "" : item.peso}
                       onChange={(e) => {
                         const value = e.target.value;
@@ -316,15 +344,31 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
                   <td className="p-2 border-b">
                     <button
                       type="button"
-                      className="bg-red-400 text-white px-2 py-1 rounded-lg hover:bg-red-600"
+                      className="bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-600 active:scale-95 min-h-[44px]"
                       onClick={() =>
                         setItems((prev: RpgItem[]) =>
                           prev.filter((_, i) => i !== idx)
                         )
                       }
                       disabled={items.length === 1}
+                      aria-label="Remover item"
                     >
-                      ✕
+                      <span className="sr-only">Remover</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <title>Remover</title>
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
                     </button>
                   </td>
                 </tr>

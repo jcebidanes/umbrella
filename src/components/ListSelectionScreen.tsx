@@ -1,4 +1,13 @@
 import React, { useRef, useState } from "react";
+import {
+  buttonPrimary,
+  buttonSuccess,
+  buttonIndigo,
+  buttonWarning,
+  containerBase,
+  inputBase,
+  cardBase,
+} from "../styles/commonStyles";
 import { RpgLists } from "../types/rpgTypes";
 
 type ListSelectionScreenProps = {
@@ -71,14 +80,14 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
   return (
     <div
       id="list-selection-screen"
-      className="flex flex-col items-center justify-center p-4"
+      className={containerBase + " justify-center"}
     >
-      <p className="text-gray-600 mb-6 text-center">
+      <p className="text-gray-600 mb-6 text-center text-base sm:text-lg">
         Selecione, crie ou importe listas para sua campanha.
       </p>
       <div id="list-buttons-container" className="w-full space-y-4 mb-6">
         {listNames.length === 0 ? (
-          <p className="text-gray-500 text-center">
+          <p className="text-gray-500 text-center text-base sm:text-lg">
             Nenhuma lista criada ainda. Clique em "Criar Nova Lista" ou importe!
           </p>
         ) : (
@@ -86,7 +95,7 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
             <button
               key={listName}
               onClick={() => onSelectList(listName)}
-              className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1"
+              className={buttonPrimary + " text-base sm:text-lg"}
             >
               {listName}
             </button>
@@ -95,7 +104,7 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
       </div>
       <button
         onClick={onCreateNewList}
-        className="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75 shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 mb-2"
+        className={buttonIndigo + " mb-2 text-base sm:text-lg"}
       >
         Criar Nova Lista
       </button>
@@ -108,24 +117,28 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
       />
       <button
         onClick={() => fileInputRef.current?.click()}
-        className="w-full bg-green-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 mb-2"
+        className={buttonSuccess + " mb-2 text-base sm:text-lg"}
       >
         Importar Listas (Arquivo)
       </button>
       <button
         onClick={() => setShowPasteModal(true)}
-        className="w-full bg-yellow-500 text-white font-bold py-3 px-6 rounded-xl hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-75 shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1"
+        className={buttonWarning + " text-base sm:text-lg"}
       >
         Colar JSON
       </button>
       {showPasteModal && (
         <div className="fixed inset-0 bg-gray-700 bg-opacity-60 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">
+          <div
+            className={cardBase + " max-w-md w-full overflow-y-auto"}
+            role="dialog"
+            aria-modal="true"
+          >
+            <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">
               Colar JSON de Listas
             </h3>
             <textarea
-              className="w-full p-3 border-2 border-gray-300 rounded-xl mb-4"
+              className={inputBase + " mb-4 text-base sm:text-lg"}
               rows={8}
               value={pastedJson}
               onChange={(e) => setPastedJson(e.target.value)}
@@ -134,13 +147,31 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
             <div className="flex justify-end space-x-2">
               <button
                 onClick={() => setShowPasteModal(false)}
-                className="px-4 py-2 rounded-md font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300"
+                className="px-4 py-2 rounded-md font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 active:scale-95"
+                aria-label="Fechar modal"
               >
-                Cancelar
+                <span className="sr-only">Fechar</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <title>Fechar</title>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </button>
               <button
                 onClick={handlePasteImport}
-                className="px-4 py-2 rounded-md font-semibold text-white bg-green-600 hover:bg-green-700"
+                className={
+                  buttonSuccess + " px-4 py-2 rounded-md font-semibold"
+                }
               >
                 Importar
               </button>
