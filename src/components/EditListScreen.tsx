@@ -22,11 +22,8 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
   onCancelEdit,
   showModal,
 }) => {
-  const [activeTab, setActiveTab] = useState<"visual" | "text" | "json">(
-    "visual"
-  );
+  const [activeTab, setActiveTab] = useState<"visual" | "json">("visual");
   const [items, setItems] = useState<RpgItem[]>([]);
-  const [editorContent, setEditorContent] = useState<string>("");
   const [jsonContent, setJsonContent] = useState<string>("");
   const [singleAddItemInput, setSingleAddItemInput] = useState<string>("");
   const [singleAddItemPeso, setSingleAddItemPeso] = useState<string>("");
@@ -35,8 +32,6 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
   useEffect(() => {
     if (activeTab === "json") {
       setJsonContent(JSON.stringify(items, null, 2));
-    } else if (activeTab === "text") {
-      setEditorContent(items.map((item) => item.nome).join("\n"));
     }
   }, [activeTab, items]);
 
@@ -44,11 +39,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
     setItems(
       allRpgLists[currentListName] ? [...allRpgLists[currentListName]] : []
     );
-    setEditorContent(
-      allRpgLists[currentListName]
-        ? allRpgLists[currentListName].map((item) => item.nome).join("\n")
-        : ""
-    );
+    // Removido setEditorContent, não há mais aba texto
     setJsonContent(
       allRpgLists[currentListName]
         ? JSON.stringify(allRpgLists[currentListName], null, 2)
@@ -118,11 +109,6 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
         );
         return;
       }
-    } else if (activeTab === "text") {
-      editedItems = editorContent
-        .split("\n")
-        .map((item: string) => ({ nome: item.trim() }))
-        .filter((item: RpgItem) => item.nome !== "");
     } else {
       editedItems = items;
     }
@@ -266,16 +252,6 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
           Editor Visual
         </button>
         <button
-          onClick={() => setActiveTab("text")}
-          className={`flex-1 py-2 font-bold ${
-            activeTab === "text"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 text-gray-700"
-          }`}
-        >
-          Itens (Texto)
-        </button>
-        <button
           onClick={() => setActiveTab("json")}
           className={`flex-1 py-2 font-bold rounded-tr-xl rounded-br-xl ${
             activeTab === "json"
@@ -357,15 +333,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
           </table>
         </div>
       )}
-      {activeTab === "text" && (
-        <textarea
-          id="itemListEditor"
-          className="w-full p-4 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400 h-64 resize-y mb-6 transition-all duration-200"
-          placeholder="Ex:\nEspada longa\nLIST_REF:Monstros Comuns\nDragão"
-          value={editorContent}
-          onChange={(e) => setEditorContent(e.target.value)}
-        ></textarea>
-      )}
+      {/* Aba texto removida */}
       {activeTab === "json" && (
         <textarea
           className="w-full p-4 border-2 border-gray-300 rounded-xl font-mono h-64 resize-y mb-6 transition-all duration-200"
