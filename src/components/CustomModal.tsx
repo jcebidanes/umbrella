@@ -23,7 +23,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center p-4 z-50">
       <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
-        <h3 className="text-xl font-bold text-gray-800 mb-4">{title}</h3>
+        <h3 className={`text-xl font-bold mb-4`}>{title}</h3>
         <p className="text-gray-700 mb-6">{message}</p>
         <div className="flex justify-end space-x-4">
           <button onClick={onConfirm} className={"px-4 py-2 " + buttonPrimary}>

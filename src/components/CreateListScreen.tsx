@@ -13,11 +13,13 @@ import { RpgItem } from "../types/rpgTypes";
 interface CreateListScreenProps {
   onSaveNewList: (name: string, items: RpgItem[]) => Promise<void>;
   onCancel: () => void;
+  darkMode: boolean;
 }
 
 const CreateListScreen: React.FC<CreateListScreenProps> = ({
   onSaveNewList,
   onCancel,
+  darkMode,
 }) => {
   const [newListName, setNewListName] = useState<string>("");
   const [items, setItems] = useState<RpgItem[]>([
@@ -63,7 +65,7 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({
   const { t } = useTranslation();
   return (
     <div id="create-list-screen" className={containerBase}>
-      <p className="text-gray-600 mb-4 text-center text-base sm:text-lg">
+      <p className={`mb-4 text-center text-base sm:text-lg ${darkMode ? 'text-yellow-100' : 'text-gray-600'}`}>
         {t("createList.title")}
       </p>
       <input

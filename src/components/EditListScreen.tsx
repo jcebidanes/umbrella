@@ -22,6 +22,7 @@ interface EditListScreenProps {
     message: string,
     isConfirm?: boolean
   ) => Promise<boolean>;
+  darkMode: boolean;
 }
 
 const EditListScreen: React.FC<EditListScreenProps> = ({
@@ -31,6 +32,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
   onDeleteList,
   onCancelEdit,
   showModal,
+  darkMode,
 }) => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<"visual" | "json">("visual");
@@ -183,10 +185,9 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
   return (
     <div id="edit-list-screen" className={containerBase}>
       <h2
-        id="editListNameTitle"
-        className="text-2xl font-bold text-gray-700 mb-4 text-center"
+        className={`text-2xl font-bold mb-4 text-center ${darkMode ? 'text-yellow-100' : 'text-gray-800'}`}
       >
-        {currentListName}
+        {t("editList.title")}
       </h2>
       <p className="text-gray-600 mb-4 text-center">{t("editList.title")}</p>
 

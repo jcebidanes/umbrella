@@ -20,6 +20,7 @@ interface RandomizerScreenProps {
     message: string,
     isConfirm?: boolean
   ) => Promise<boolean>;
+  darkMode: boolean;
 }
 
 function getWeightedRandomItem(items: RpgItem[]): RpgItem | null {
@@ -42,6 +43,7 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
   onEditList,
   onBackToLists,
   showModal,
+  darkMode,
 }) => {
   const { t } = useTranslation();
   const [resultText, setResultText] = useState<string>(
@@ -126,11 +128,11 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
     <div id="randomizer-screen" className={containerBase}>
       <h2
         id="currentListNameTitle"
-        className="sm:text-2xl text-xl font-bold text-gray-700 mb-4 text-center"
+        className={`sm:text-2xl text-xl font-bold mb-4 text-center ${darkMode ? 'text-yellow-100' : 'text-gray-700'}`}
       >
         {currentListName}
       </h2>
-      <p className="text-gray-600 mb-4 text-center text-base sm:text-lg">
+      <p className={`mb-4 text-center text-base sm:text-lg ${darkMode ? 'text-yellow-100' : 'text-gray-600'}`}>
         {t("randomizer.instruction")}
       </p>
       <button
