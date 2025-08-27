@@ -49,6 +49,7 @@
         "pasteJson": "Paste JSON",
         "pasteTitle": "Paste Lists JSON",
         "pastePlaceholder": "Paste your lists JSON here...",
+        "invalidFormatError": "Invalid lists format.",
         "closeModal": "Close",
         "import": "Import"
     },

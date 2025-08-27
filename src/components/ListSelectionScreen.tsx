@@ -18,7 +18,10 @@ type ListSelectionScreenProps = {
   onImportLists: (lists: RpgLists) => void;
 };
 
-function importListsFromFile(file: File): Promise<RpgLists> {
+function importListsFromFile(
+  file: File,
+  t: (key: string, options?: any) => string
+): Promise<RpgLists> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -26,7 +29,7 @@ function importListsFromFile(file: File): Promise<RpgLists> {
         const result = event.target?.result as string;
         const imported = JSON.parse(result);
         if (typeof imported !== "object" || Array.isArray(imported)) {
-          reject(new Error("Formato inválido de listas."));
+          reject(new Error(t("listSelection.invalidFormatError")));
         } else {
           resolve(imported);
         }
@@ -54,10 +57,12 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
     const file = e.target.files?.[0];
     if (file) {
       try {
-        const imported = await importListsFromFile(file);
+        const imported = await importListsFromFile(file, t);
         onImportLists(imported);
       } catch (err) {
-        alert("Erro ao importar listas: " + (err as Error).message);
+        alert(
+          t("listSelection.importError", { error: (err as Error).message })
+        );
       }
       e.target.value = "";
     }
@@ -66,15 +71,28 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
   const handlePasteImport = () => {
     try {
       const imported = JSON.parse(pastedJson);
-      if (typeof imported !== "object" || Array.isArray(imported)) {
-        alert("Formato inválido de listas.");
+      // Aceita objeto de arrays (múltiplas tabelas)
+      if (
+        typeof imported !== "object" ||
+        imported === null ||
+        Array.isArray(imported)
+      ) {
+        alert(t("listSelection.invalidFormatError"));
+        return;
+      }
+      // Valida que cada propriedade é um array
+      const invalidTables = Object.entries(imported).filter(
+        ([, value]) => !Array.isArray(value)
+      );
+      if (invalidTables.length > 0) {
+        alert(t("listSelection.invalidFormatError"));
         return;
       }
       onImportLists(imported);
       setShowPasteModal(false);
       setPastedJson("");
     } catch (err) {
-      alert("Erro ao importar listas: " + (err as Error).message);
+      alert(t("listSelection.importError", { error: (err as Error).message }));
     }
   };
 

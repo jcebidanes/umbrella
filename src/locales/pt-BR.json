@@ -49,6 +49,8 @@
         "pasteJson": "Colar JSON",
         "pasteTitle": "Colar JSON de Listas",
         "pastePlaceholder": "Cole aqui o JSON de listas...",
+        "invalidFormatError": "Formato inválido de listas.",
+        "importError": "Erro ao importar listas: {{error}}",
         "closeModal": "Fechar",
         "import": "Importar"
     },

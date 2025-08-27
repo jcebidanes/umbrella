@@ -4,6 +4,9 @@ import {
   buttonPrimary,
   buttonSecondary,
   containerBase,
+  resultDisplayDefault,
+  resultDisplayError,
+  resultDisplaySuccess,
 } from "../styles/commonStyles";
 import { RpgLists, RpgItem } from "../types/rpgTypes";
 
@@ -44,9 +47,8 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
   const [resultText, setResultText] = useState<string>(
     t("randomizer.instruction", { list: currentListName })
   );
-  const [resultDisplayClass, setResultDisplayClass] = useState<string>(
-    "mt-4 p-6 bg-gradient-to-r from-blue-400 to-indigo-500 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full"
-  );
+  const [resultDisplayClass, setResultDisplayClass] =
+    useState<string>(resultDisplayDefault);
 
   const randomizeItem = useCallback(async () => {
     let currentPath: string[] = [currentListName];
@@ -57,22 +59,18 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
     while (!foundFinalItem && maxDepth > 0) {
       if (!currentItems || currentItems.length === 0) {
         await showModal(
-          "Erro",
-          `A lista "${currentListName}" está vazia ou não existe.`
+          t("randomizer.errorTitle"),
+          t("randomizer.emptyListError", { list: currentListName })
         );
-        setResultText("Erro: Sorteio falhou.");
-        setResultDisplayClass(
-          "mt-4 p-6 bg-red-400 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full"
-        );
+        setResultText(t("randomizer.drawFailed"));
+        setResultDisplayClass(resultDisplayError);
         return;
       }
       const selectedItem = getWeightedRandomItem(currentItems);
       if (!selectedItem) {
-        await showModal("Erro", "Não foi possível sortear um item.");
-        setResultText("Erro: Sorteio falhou.");
-        setResultDisplayClass(
-          "mt-4 p-6 bg-red-400 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full"
-        );
+        await showModal(t("randomizer.errorTitle"), t("randomizer.drawFailed"));
+        setResultText(t("randomizer.drawFailed"));
+        setResultDisplayClass(resultDisplayError);
         return;
       }
       if (selectedItem.nome.startsWith("LIST_REF:")) {
@@ -81,10 +79,8 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
           .trim();
         if (allRpgLists[nextListName]) {
           if (currentPath.includes(nextListName)) {
-            setResultText(`Erro: Loop de referência em "${nextListName}"`);
-            setResultDisplayClass(
-              "mt-4 p-6 bg-red-400 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full"
-            );
+            setResultText(t("randomizer.loopError", { list: nextListName }));
+            setResultDisplayClass(resultDisplayError);
             return;
           }
           currentPath.push(nextListName);
@@ -92,15 +88,15 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
           maxDepth--;
         } else {
           await showModal(
-            "Erro",
-            `Lista aninhada "${nextListName}" não encontrada. Não é possível sortear.`
+            t("randomizer.errorTitle"),
+            t("randomizer.nestedListNotFoundError", { list: nextListName })
           );
           setResultText(
-            `Erro: Lista aninhada "${nextListName}" não encontrada.`
+            t("randomizer.nestedListNotFoundErrorResult", {
+              list: nextListName,
+            })
           );
-          setResultDisplayClass(
-            "mt-4 p-6 bg-red-400 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full"
-          );
+          setResultDisplayClass(resultDisplayError);
           return;
         }
       } else {
@@ -110,19 +106,20 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
     }
     if (!foundFinalItem) {
       await showModal(
-        "Erro",
-        "Profundidade máxima de referência atingida. Possível loop ou lista muito complexa."
+        t("randomizer.errorTitle"),
+        t("randomizer.maxDepthError")
       );
-      setResultText("Erro: Profundidade máxima de referência atingida.");
-      setResultDisplayClass(
-        "mt-4 p-6 bg-red-400 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full"
-      );
+      setResultText(t("randomizer.maxDepthErrorResult"));
+      setResultDisplayClass(resultDisplayError);
       return;
     }
-    setResultText(`${currentPath.join(" -> ")} -> ${finalItem?.nome}`);
-    setResultDisplayClass(
-      "mt-4 p-6 bg-gradient-to-r from-green-400 to-emerald-500 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full"
-    );
+    const result = t("randomizer.successResult", {
+      path: currentPath.join(" -> "),
+      item: finalItem?.nome,
+      defaultValue: `${currentPath.join(" -> ")} -> ${finalItem?.nome}`,
+    });
+    setResultText(result);
+    setResultDisplayClass(resultDisplaySuccess);
   }, [currentListName, allRpgLists, showModal]);
 
   return (
@@ -138,10 +135,7 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
       </p>
       <button
         onClick={randomizeItem}
-        className={
-          buttonPrimary +
-          " mb-4 text-base sm:text-lg bg-purple-600 hover:bg-purple-700 focus:ring-purple-500"
-        }
+        className={buttonPrimary + " mb-4 text-base sm:text-lg"}
       >
         {t("randomizer.draw")}
       </button>
@@ -164,10 +158,7 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
       </button>
       <button
         onClick={onBackToLists}
-        className={
-          buttonSecondary +
-          " mt-4 text-base sm:text-lg bg-gray-400 hover:bg-gray-500 focus:ring-gray-400"
-        }
+        className={buttonSecondary + " mt-4 text-base sm:text-lg"}
         aria-label={t("randomizer.back")}
       >
         <span className="sr-only">{t("randomizer.back")}</span>
