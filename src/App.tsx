@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { containerBase, cardBase } from "./styles/commonStyles";
 import ListSelectionScreen from "./components/ListSelectionScreen";
 import CreateListScreen from "./components/CreateListScreen";
 import EditListScreen from "./components/EditListScreen";
@@ -187,9 +188,9 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4">
-      <div className="bg-white p-8 rounded-2xl shadow-xl max-w-lg w-full transform transition-all duration-300 hover:shadow-2xl">
-        <h1 className="text-3xl font-extrabold text-gray-800 mb-6 text-center">
+    <div className={containerBase + " pt-4 min-h-screen"} role="main">
+      <div className={cardBase}>
+        <h1 className="sm:text-3xl text-2xl font-extrabold text-gray-800 mb-6 text-center">
           🎲 Gerador de Elementos de Campanha RPG
         </h1>
 
@@ -229,7 +230,10 @@ const App: React.FC = () => {
           />
         )}
       </div>
-      <CustomModal {...modalInfo} />
+      {/* Modal acessível */}
+      <div role="dialog" aria-modal="true">
+        <CustomModal {...modalInfo} />
+      </div>
     </div>
   );
 };
