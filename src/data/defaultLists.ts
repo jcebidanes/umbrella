@@ -1,34 +1,42 @@
 // src/data/defaultLists.ts
 
-export interface RpgLists {
-    [key: string]: string[];
-}
+
+import { RpgLists, RpgItem } from "../types/rpgTypes";
 
 export const defaultLists: RpgLists = {
     "Armas RPG": [
-        "LIST_REF:Armas de Corpo a Corpo",
-        "LIST_REF:Armas de Distância",
-        "Escudo",
-        "Alabarda",
+        { nome: "LIST_REF:Armas de Corpo a Corpo" },
+        { nome: "LIST_REF:Armas de Distância" },
+        { nome: "Escudo" },
+        { nome: "Alabarda" },
     ],
     "Armas de Corpo a Corpo": [
-        "Espada longa",
-        "Machado",
-        "Adaga",
-        "Maça",
-        "Mangual",
-        "Cimitarra",
-        "Facão",
-        "Foice",
-        "Estrela da manhã",
-        "Cajado",
+        { nome: "Espada longa" },
+        { nome: "Machado" },
+        { nome: "Adaga" },
+        { nome: "Maça" },
+        { nome: "Mangual" },
+        { nome: "Cimitarra" },
+        { nome: "Facão" },
+        { nome: "Foice" },
+        { nome: "Estrela da manhã" },
+        { nome: "Cajado" },
     ],
-    "Armas de Distância": ["Arco e Flecha", "Besta", "Lança"],
-    "Monstros Iniciais": ["Goblin", "Orc", "Slime", "Rato Gigante"],
+    "Armas de Distância": [
+        { nome: "Arco e Flecha" },
+        { nome: "Besta" },
+        { nome: "Lança" },
+    ],
+    "Monstros Iniciais": [
+        { nome: "Goblin" },
+        { nome: "Orc" },
+        { nome: "Slime" },
+        { nome: "Rato Gigante" },
+    ],
     "Tesouros Comuns": [
-        "5 moedas de ouro",
-        "Pote de cura",
-        "Mapa rasgado",
-        "Chave enferrujada",
+        { nome: "5 moedas de ouro" },
+        { nome: "Pote de cura" },
+        { nome: "Mapa rasgado" },
+        { nome: "Chave enferrujada" },
     ],
 };
