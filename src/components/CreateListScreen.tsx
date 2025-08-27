@@ -65,7 +65,11 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({
   const { t } = useTranslation();
   return (
     <div id="create-list-screen" className={containerBase}>
-      <p className={`mb-4 text-center text-base sm:text-lg ${darkMode ? 'text-yellow-100' : 'text-gray-600'}`}>
+      <p
+        className={`mb-4 text-center text-base sm:text-lg ${
+          darkMode ? "text-yellow-100" : "text-gray-600"
+        }`}
+      >
         {t("createList.title")}
       </p>
       <input

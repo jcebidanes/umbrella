@@ -128,11 +128,17 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
     <div id="randomizer-screen" className={containerBase}>
       <h2
         id="currentListNameTitle"
-        className={`sm:text-2xl text-xl font-bold mb-4 text-center ${darkMode ? 'text-yellow-100' : 'text-gray-700'}`}
+        className={`sm:text-2xl text-xl font-bold mb-4 text-center ${
+          darkMode ? "text-yellow-100" : "text-gray-700"
+        }`}
       >
         {currentListName}
       </h2>
-      <p className={`mb-4 text-center text-base sm:text-lg ${darkMode ? 'text-yellow-100' : 'text-gray-600'}`}>
+      <p
+        className={`mb-4 text-center text-base sm:text-lg ${
+          darkMode ? "text-yellow-100" : "text-gray-600"
+        }`}
+      >
         {t("randomizer.instruction")}
       </p>
       <button
