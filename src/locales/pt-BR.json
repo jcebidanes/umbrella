@@ -1,0 +1,64 @@
+{
+    "appTitle": "🎲 Gerador de Elementos de Campanha RPG",
+    "createList": {
+        "title": "Crie sua nova lista de elementos. O nome é obrigatório.",
+        "namePlaceholder": "Nome da nova lista (ex: Monstros, Tesouros)",
+        "itemPlaceholder": "Item {{index}}",
+        "weightPlaceholder": "Peso",
+        "addItem": "+ Adicionar Item",
+        "save": "Salvar Nova Lista",
+        "cancel": "Cancelar"
+    },
+    "editList": {
+        "title": "Edite os itens da lista, incluindo o peso para sorteio ponderado.",
+        "addItem": "Adicionar Item:",
+        "itemNamePlaceholder": "Nome do novo item",
+        "weightPlaceholder": "Peso",
+        "selectListReferencePlaceholder": "-- Selecione uma lista --",
+        "addListReference": "Adicionar Referência de Lista:",
+        "addListReferenceButton": "Adicionar REF",
+        "visualEditorTab": "Editor Visual",
+        "nameColumn": "Nome",
+        "weightColumn": "Peso",
+        "actionsColumn": "Ações",
+        "removeItem": "Remover",
+        "jsonPlaceholder": "Cole ou edite o JSON da lista aqui...",
+        "saveButton": "Salvar Edições e Voltar",
+        "deleteButton": "Excluir Esta Lista",
+        "cancelButton": "Cancelar",
+        "errorTitle": "Erro",
+        "selectListReferenceError": "Por favor, selecione uma lista para adicionar como referência.",
+        "invalidJsonError": "O JSON não é válido ou não é um array de objetos com nome/peso.",
+        "validationErrorTitle": "Erro de Validação",
+        "listReferenceDoesNotExistError": "A referência de lista \"{{referencedListName}}\" não existe. Por favor, corrija ou crie esta lista.",
+        "deleteConfirm": "Tem certeza que deseja excluir a lista \"{{currentListName}}\"?",
+        "deleteWarning": "ATENÇÃO: Esta lista está sendo referenciada por outras listas: {{referencingLists}}. Se você continuar, estas referências serão REMOVIDAS AUTOMATICAMENTE. Deseja prosseguir?",
+        "deleteTitle": "Confirmação de Exclusão"
+    },
+    "randomizer": {
+        "draw": "Sortear Item!",
+        "edit": "Editar Lista",
+        "back": "Voltar para Listas",
+        "instruction": "Clique para sortear um item ou edite a lista."
+    },
+    "listSelection": {
+        "instruction": "Selecione, crie ou importe listas para sua campanha.",
+        "noLists": "Nenhuma lista criada ainda. Clique em 'Criar Nova Lista' ou importe!",
+        "createNew": "Criar Nova Lista",
+        "importFile": "Importar Listas (Arquivo)",
+        "pasteJson": "Colar JSON",
+        "pasteTitle": "Colar JSON de Listas",
+        "pastePlaceholder": "Cole aqui o JSON de listas...",
+        "closeModal": "Fechar",
+        "import": "Importar"
+    },
+    "modal": {
+        "ok": "OK",
+        "cancel": "Cancelar"
+    },
+    "errors": {
+        "title": "Erro",
+        "listNameRequired": "O nome da lista é obrigatório!",
+        "listNameExists": "Já existe uma lista com o nome '{{name}}'. Escolha um nome diferente."
+    }
+}

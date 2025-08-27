@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import "./i18n";
 import { containerBase, cardBase } from "./styles/commonStyles";
 import ListSelectionScreen from "./components/ListSelectionScreen";
 import CreateListScreen from "./components/CreateListScreen";
@@ -187,13 +189,13 @@ const App: React.FC = () => {
     setCurrentScreen("list-selection");
   };
 
+  const { t } = useTranslation();
   return (
     <div className={containerBase + " pt-4 min-h-screen"} role="main">
       <div className={cardBase}>
         <h1 className="sm:text-3xl text-2xl font-extrabold text-gray-800 mb-6 text-center">
-          🎲 Gerador de Elementos de Campanha RPG
+          {t("appTitle")}
         </h1>
-
         {currentScreen === "list-selection" && (
           <ListSelectionScreen
             allRpgLists={allRpgLists}
