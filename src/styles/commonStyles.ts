@@ -1,7 +1,7 @@
 // Common Tailwind style strings for buttons, inputs, containers, etc.
 
 export const buttonBase =
-    "w-full min-h-[48px] font-bold rounded-xl transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-opacity-75 transform hover:-translate-y-1";
+    "w-full min-h-[48px] font-bold rounded-xl shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-opacity-75";
 
 export const buttonPrimary =
     `${buttonBase} bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500`;

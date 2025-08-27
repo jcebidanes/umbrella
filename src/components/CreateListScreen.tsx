@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   buttonPrimary,
   buttonDanger,
@@ -59,18 +60,17 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({
     setItems([{ nome: "", peso: undefined }]);
   };
 
+  const { t } = useTranslation();
   return (
     <div id="create-list-screen" className={containerBase}>
       <p className="text-gray-600 mb-4 text-center text-base sm:text-lg">
-        Crie sua nova lista de elementos. O nome é obrigatório.
-        <br />
-        Você pode definir o peso de cada item para sorteio ponderado (opcional).
+        {t("createList.title")}
       </p>
       <input
         type="text"
         id="newListNameInput"
         className={`${inputBase} mb-4`}
-        placeholder="Nome da nova lista (ex: Monstros, Tesouros)"
+        placeholder={t("createList.namePlaceholder")}
         value={newListName}
         onChange={(e) => setNewListName(e.target.value)}
       />
@@ -82,7 +82,7 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({
               className={
                 "flex-grow p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400 transition-all duration-200 text-base sm:text-lg"
               }
-              placeholder={`Item ${idx + 1}`}
+              placeholder={t("createList.itemPlaceholder", { index: idx + 1 })}
               value={item.nome}
               onChange={(e) => handleItemChange(idx, "nome", e.target.value)}
             />
@@ -90,19 +90,19 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({
               type="number"
               min="1"
               className="w-20 p-3 border-2 border-gray-300 rounded-xl text-base sm:text-lg"
-              placeholder="Peso"
+              placeholder={t("createList.weightPlaceholder")}
               value={item.peso === undefined ? "" : item.peso}
               onChange={(e) => handleItemChange(idx, "peso", e.target.value)}
             />
             <button
               type="button"
-              className="ml-2 flex items-center justify-center bg-red-600 text-white rounded-xl p-2 hover:bg-red-700 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75 transition-all duration-200"
+              className="ml-2 flex items-center justify-center bg-red-600 text-white rounded-xl p-2 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75 duration-200"
               style={{ width: 40, height: 40 }}
               onClick={() => handleRemoveItem(idx)}
               disabled={items.length === 1}
-              aria-label="Remover item"
+              aria-label={t("createList.cancel")}
             >
-              <span className="sr-only">Remover</span>
+              <span className="sr-only">{t("createList.cancel")}</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 mx-auto"
@@ -110,7 +110,7 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <title>Remover</title>
+                <title>{t("createList.cancel")}</title>
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -126,14 +126,14 @@ const CreateListScreen: React.FC<CreateListScreenProps> = ({
           className={`mt-2 ${buttonPrimary}`}
           onClick={handleAddItem}
         >
-          + Adicionar Item
+          {t("createList.addItem")}
         </button>
       </div>
       <button onClick={handleSave} className={`${buttonSuccess} mb-4`}>
-        Salvar Nova Lista
+        {t("createList.save")}
       </button>
       <button onClick={onCancel} className={buttonDanger}>
-        Cancelar
+        {t("createList.cancel")}
       </button>
     </div>
   );

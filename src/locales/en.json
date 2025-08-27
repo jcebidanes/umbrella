@@ -1,0 +1,64 @@
+{
+    "appTitle": "🎲 RPG Campaign Element Generator",
+    "createList": {
+        "title": "Create your new list of elements. Name is required.",
+        "namePlaceholder": "New list name (e.g. Monsters, Treasures)",
+        "itemPlaceholder": "Item {{index}}",
+        "weightPlaceholder": "Weight",
+        "addItem": "+ Add Item",
+        "save": "Save New List",
+        "cancel": "Cancel"
+    },
+    "editList": {
+        "title": "Edit list items, including weight for weighted draw.",
+        "addItem": "Add Item:",
+        "itemNamePlaceholder": "New item name",
+        "weightPlaceholder": "Weight",
+        "selectListReferencePlaceholder": "-- Select a list --",
+        "addListReference": "Add List Reference:",
+        "addListReferenceButton": "Add REF",
+        "visualEditorTab": "Visual Editor",
+        "nameColumn": "Name",
+        "weightColumn": "Weight",
+        "actionsColumn": "Actions",
+        "removeItem": "Remove",
+        "jsonPlaceholder": "Paste or edit the list JSON here...",
+        "saveButton": "Save Edits and Back",
+        "deleteButton": "Delete This List",
+        "cancelButton": "Cancel",
+        "errorTitle": "Error",
+        "selectListReferenceError": "Please select a list to add as reference.",
+        "invalidJsonError": "JSON is invalid or not an array of objects with name/weight.",
+        "validationErrorTitle": "Validation Error",
+        "listReferenceDoesNotExistError": "List reference \"{{referencedListName}}\" does not exist. Please fix or create this list.",
+        "deleteConfirm": "Are you sure you want to delete the list \"{{currentListName}}\"?",
+        "deleteWarning": "WARNING: This list is referenced by other lists: {{referencingLists}}. If you continue, these references will be REMOVED AUTOMATICALLY. Do you want to proceed?",
+        "deleteTitle": "Delete Confirmation"
+    },
+    "randomizer": {
+        "draw": "Draw Item!",
+        "edit": "Edit List",
+        "back": "Back to Lists",
+        "instruction": "Click to draw an item or edit the list."
+    },
+    "listSelection": {
+        "instruction": "Select, create or import lists for your campaign.",
+        "noLists": "No lists created yet. Click 'Create New List' or import!",
+        "createNew": "Create New List",
+        "importFile": "Import Lists (File)",
+        "pasteJson": "Paste JSON",
+        "pasteTitle": "Paste Lists JSON",
+        "pastePlaceholder": "Paste your lists JSON here...",
+        "closeModal": "Close",
+        "import": "Import"
+    },
+    "modal": {
+        "ok": "OK",
+        "cancel": "Cancel"
+    },
+    "errors": {
+        "title": "Error",
+        "listNameRequired": "List name is required!",
+        "listNameExists": "A list named '{{name}}' already exists. Please choose a different name."
+    }
+}

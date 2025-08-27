@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import {
   buttonPrimary,
   buttonSecondary,
@@ -39,8 +40,9 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
   onBackToLists,
   showModal,
 }) => {
+  const { t } = useTranslation();
   const [resultText, setResultText] = useState<string>(
-    `Clique para sortear de "${currentListName}"!`
+    t("randomizer.instruction", { list: currentListName })
   );
   const [resultDisplayClass, setResultDisplayClass] = useState<string>(
     "mt-4 p-6 bg-gradient-to-r from-blue-400 to-indigo-500 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full"
@@ -132,7 +134,7 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
         {currentListName}
       </h2>
       <p className="text-gray-600 mb-4 text-center text-base sm:text-lg">
-        Clique para sortear um item ou edite a lista.
+        {t("randomizer.instruction")}
       </p>
       <button
         onClick={randomizeItem}
@@ -141,7 +143,7 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
           " mb-4 text-base sm:text-lg bg-purple-600 hover:bg-purple-700 focus:ring-purple-500"
         }
       >
-        Sortear Item!
+        {t("randomizer.draw")}
       </button>
       <div
         id="resultDisplay"
@@ -155,10 +157,10 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
       <button
         onClick={onEditList}
         className={buttonSecondary + " mt-6 text-base sm:text-lg"}
-        aria-label="Editar lista"
+        aria-label={t("randomizer.edit")}
       >
-        <span className="sr-only">Editar lista</span>
-        Editar Lista
+        <span className="sr-only">{t("randomizer.edit")}</span>
+        {t("randomizer.edit")}
       </button>
       <button
         onClick={onBackToLists}
@@ -166,10 +168,10 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
           buttonSecondary +
           " mt-4 text-base sm:text-lg bg-gray-400 hover:bg-gray-500 focus:ring-gray-400"
         }
-        aria-label="Voltar para listas"
+        aria-label={t("randomizer.back")}
       >
-        <span className="sr-only">Voltar para listas</span>
-        Voltar para Listas
+        <span className="sr-only">{t("randomizer.back")}</span>
+        {t("randomizer.back")}
       </button>
     </div>
   );

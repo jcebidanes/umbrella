@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export interface CustomModalProps {
   title: string;
@@ -15,6 +16,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
   onConfirm,
   onCancel,
 }) => {
+  const { t } = useTranslation();
   if (!title) return null; // Não renderiza se não houver título (modal oculto)
 
   return (
@@ -27,14 +29,14 @@ const CustomModal: React.FC<CustomModalProps> = ({
             onClick={onConfirm}
             className="px-4 py-2 rounded-md font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
           >
-            OK
+            {t("modal.ok")}
           </button>
           {isConfirm && (
             <button
               onClick={onCancel}
               className="px-4 py-2 rounded-md font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-colors duration-200"
             >
-              Cancelar
+              {t("modal.cancel")}
             </button>
           )}
         </div>
