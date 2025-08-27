@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   buttonPrimary,
   buttonSuccess,
@@ -77,18 +78,19 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
     }
   };
 
+  const { t } = useTranslation();
   return (
     <div
       id="list-selection-screen"
       className={containerBase + " justify-center"}
     >
       <p className="text-gray-600 mb-6 text-center text-base sm:text-lg">
-        Selecione, crie ou importe listas para sua campanha.
+        {t("listSelection.instruction")}
       </p>
       <div id="list-buttons-container" className="w-full space-y-4 mb-6">
         {listNames.length === 0 ? (
           <p className="text-gray-500 text-center text-base sm:text-lg">
-            Nenhuma lista criada ainda. Clique em "Criar Nova Lista" ou importe!
+            {t("listSelection.noLists")}
           </p>
         ) : (
           listNames.map((listName: string) => (
@@ -106,7 +108,7 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
         onClick={onCreateNewList}
         className={buttonIndigo + " mb-2 text-base sm:text-lg"}
       >
-        Criar Nova Lista
+        {t("listSelection.createNew")}
       </button>
       <input
         type="file"
@@ -119,13 +121,13 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
         onClick={() => fileInputRef.current?.click()}
         className={buttonSuccess + " mb-2 text-base sm:text-lg"}
       >
-        Importar Listas (Arquivo)
+        {t("listSelection.importFile")}
       </button>
       <button
         onClick={() => setShowPasteModal(true)}
         className={buttonWarning + " text-base sm:text-lg"}
       >
-        Colar JSON
+        {t("listSelection.pasteJson")}
       </button>
       {showPasteModal && (
         <div className="fixed inset-0 bg-gray-700 bg-opacity-60 flex items-center justify-center z-50">
@@ -135,22 +137,22 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
             aria-modal="true"
           >
             <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">
-              Colar JSON de Listas
+              {t("listSelection.pasteTitle")}
             </h3>
             <textarea
               className={inputBase + " mb-4 text-base sm:text-lg"}
               rows={8}
               value={pastedJson}
               onChange={(e) => setPastedJson(e.target.value)}
-              placeholder="Cole aqui o JSON de listas..."
+              placeholder={t("listSelection.pastePlaceholder")}
             />
             <div className="flex justify-end space-x-2">
               <button
                 onClick={() => setShowPasteModal(false)}
-                className="px-4 py-2 rounded-md font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 active:scale-95"
-                aria-label="Fechar modal"
+                className="px-4 py-2 rounded-md font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300"
+                aria-label={t("listSelection.closeModal")}
               >
-                <span className="sr-only">Fechar</span>
+                <span className="sr-only">{t("listSelection.closeModal")}</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
@@ -158,7 +160,7 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <title>Fechar</title>
+                  <title>{t("listSelection.closeModal")}</title>
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -173,7 +175,7 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
                   buttonSuccess + " px-4 py-2 rounded-md font-semibold"
                 }
               >
-                Importar
+                {t("listSelection.import")}
               </button>
             </div>
           </div>

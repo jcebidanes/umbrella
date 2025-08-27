@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import {
   buttonPrimary,
   buttonDanger,
@@ -31,6 +32,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
   onCancelEdit,
   showModal,
 }) => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<"visual" | "json">("visual");
   const [items, setItems] = useState<RpgItem[]>([]);
   const [jsonContent, setJsonContent] = useState<string>("");
@@ -62,7 +64,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
       .sort();
     return (
       <>
-        <option value="">-- Selecione uma lista --</option>
+        <option value="">{t("editList.selectListReferencePlaceholder")}</option>
         {otherListNames.map((listName: string) => (
           <option key={listName} value={listName}>
             {listName}
@@ -89,8 +91,8 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
   const handleAddListReference = async () => {
     if (!listReferenceSelect) {
       await showModal(
-        "Erro",
-        "Por favor, selecione uma lista para adicionar como referência."
+        t("editList.errorTitle"),
+        t("editList.selectListReferenceError")
       );
       return;
     }
@@ -113,8 +115,8 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
         }));
       } catch {
         await showModal(
-          "Erro",
-          "O JSON não é válido ou não é um array de objetos com nome/peso."
+          t("editList.errorTitle"),
+          t("editList.invalidJsonError")
         );
         return;
       }
@@ -133,8 +135,8 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
           referencedListName !== currentListName
         ) {
           await showModal(
-            "Erro de Validação",
-            `A referência de lista "${referencedListName}" não existe. Por favor, corrija ou crie esta lista.`
+            t("editList.validationErrorTitle"),
+            t("editList.listReferenceDoesNotExistError", { referencedListName })
           );
           return;
         }
@@ -159,16 +161,17 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
       }
     }
 
-    let confirmMessage: string = `Tem certeza que deseja excluir a lista "${currentListName}"?`;
+    let confirmMessage: string = t("editList.deleteConfirm", {
+      currentListName,
+    });
     if (referencingLists.length > 0) {
-      confirmMessage += `\n\nATENÇÃO: Esta lista está sendo referenciada por ${
-        referencingLists.length
-      } outra(s) lista(s): ${referencingLists.join(", ")}.`;
-      confirmMessage += `\n\nSe você continuar, estas referências serão REMOVIDAS AUTOMATICAMENTE. Deseja prosseguir?`;
+      confirmMessage += `\n\n${t("editList.deleteWarning", {
+        referencingLists: referencingLists.join(", "),
+      })}`;
     }
 
     const confirmed = await showModal(
-      "Confirmação de Exclusão",
+      t("editList.deleteTitle"),
       confirmMessage,
       true
     );
@@ -185,9 +188,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
       >
         {currentListName}
       </h2>
-      <p className="text-gray-600 mb-4 text-center">
-        Edite os itens da lista, incluindo o peso para sorteio ponderado.
-      </p>
+      <p className="text-gray-600 mb-4 text-center">{t("editList.title")}</p>
 
       <div className={cardBase + " mb-6 space-y-4 bg-gray-50 shadow-inner"}>
         <div className="flex flex-col">
@@ -195,7 +196,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
             htmlFor="singleAddItemInput"
             className="text-gray-700 text-sm font-semibold mb-2"
           >
-            Adicionar Item:
+            {t("editList.addItem")}
           </label>
           <div className="flex items-center mb-2 gap-2">
             <input
@@ -204,7 +205,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
               className={
                 "flex-grow p-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400 transition-all duration-200 text-base sm:text-lg"
               }
-              placeholder="Nome do novo item"
+              placeholder={t("editList.itemNamePlaceholder")}
               value={singleAddItemInput}
               onChange={(e) => setSingleAddItemInput(e.target.value)}
             />
@@ -212,17 +213,19 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
               type="number"
               min="1"
               className="w-20 p-3 border-2 border-gray-300 rounded-xl text-base sm:text-lg"
-              placeholder="Peso"
+              placeholder={t("editList.weightPlaceholder")}
               value={singleAddItemPeso}
               onChange={(e) => setSingleAddItemPeso(e.target.value)}
             />
             <button
               onClick={handleAddSingleItem}
-              className="ml-2 flex items-center justify-center bg-blue-600 text-white rounded-xl p-2 hover:bg-blue-700 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition-all duration-200"
+              className={
+                buttonPrimary + " ml-2 flex items-center justify-center p-2"
+              }
               style={{ width: 40, height: 40 }}
-              aria-label="Adicionar item"
+              aria-label={t("editList.addItem")}
             >
-              <span className="sr-only">Adicionar</span>
+              <span className="sr-only">{t("editList.addItem")}</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 mx-auto"
@@ -230,7 +233,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <title>Adicionar</title>
+                <title>{t("editList.addItem")}</title>
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -247,7 +250,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
             htmlFor="listReferenceSelect"
             className="text-gray-700 text-sm font-semibold mb-2"
           >
-            Adicionar Referência de Lista:
+            {t("editList.addListReference")}
           </label>
           <div className="flex space-x-2">
             <select
@@ -260,9 +263,13 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
             </select>
             <button
               onClick={handleAddListReference}
-              className={buttonPrimary + " px-4"}
+              className={
+                buttonPrimary +
+                " ml-2 flex items-center font-bold justify-center p-2"
+              }
+              style={{ minHeight: 44 }}
             >
-              Adicionar REF
+              {t("editList.addListReferenceButton")}
             </button>
           </div>
         </div>
@@ -277,7 +284,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
               : "bg-gray-200 text-gray-700"
           }`}
         >
-          Editor Visual
+          {t("editList.visualEditorTab")}
         </button>
         <button
           onClick={() => setActiveTab("json")}
@@ -296,9 +303,15 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
           <table className="w-full text-left border-collapse min-w-[320px] max-w-full">
             <thead>
               <tr>
-                <th className="p-2 border-b text-base sm:text-lg">Nome</th>
-                <th className="p-2 border-b text-base sm:text-lg">Peso</th>
-                <th className="p-2 border-b text-base sm:text-lg">Ações</th>
+                <th className="p-2 border-b text-base sm:text-lg">
+                  {t("editList.nameColumn")}
+                </th>
+                <th className="p-2 border-b text-base sm:text-lg">
+                  {t("editList.weightColumn")}
+                </th>
+                <th className="p-2 border-b text-base sm:text-lg">
+                  {t("editList.actionsColumn")}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -344,16 +357,18 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
                   <td className="p-2 border-b">
                     <button
                       type="button"
-                      className="bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-600 active:scale-95 min-h-[44px]"
+                      className="bg-red-400 text-white px-4 py-2 rounded-lg hover:bg-red-600 min-h-[44px]"
                       onClick={() =>
                         setItems((prev: RpgItem[]) =>
                           prev.filter((_, i) => i !== idx)
                         )
                       }
                       disabled={items.length === 1}
-                      aria-label="Remover item"
+                      aria-label={t("editList.removeItem")}
                     >
-                      <span className="sr-only">Remover</span>
+                      <span className="sr-only">
+                        {t("editList.removeItem")}
+                      </span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5"
@@ -361,7 +376,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
                         viewBox="0 0 24 24"
                         stroke="currentColor"
                       >
-                        <title>Remover</title>
+                        <title>{t("editList.removeItem")}</title>
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -380,30 +395,30 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
       {/* Aba texto removida */}
       {activeTab === "json" && (
         <textarea
-          className="w-full p-4 border-2 border-gray-300 rounded-xl font-mono h-64 resize-y mb-6 transition-all duration-200"
+          className="w-full p-4 border-2 border-gray-300 rounded-xl font-mono h-64 resize-y mb-6 duration-200"
           value={jsonContent}
           onChange={(e) => setJsonContent(e.target.value)}
-          placeholder="Cole ou edite o JSON da lista aqui..."
+          placeholder={t("editList.jsonPlaceholder")}
         ></textarea>
       )}
 
       <button
         onClick={handleSave}
-        className="w-full bg-green-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 mb-4"
+        className="w-full bg-green-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75 shadow-md hover:shadow-lg duration-200 mb-4"
       >
-        Salvar Edições e Voltar
+        {t("editList.saveButton")}
       </button>
       <button
         onClick={handleDelete}
-        className="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75 shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1 mb-4"
+        className="w-full bg-red-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75 shadow-md hover:shadow-lg duration-200 mb-4"
       >
-        Excluir Esta Lista
+        {t("editList.deleteButton")}
       </button>
       <button
         onClick={onCancelEdit}
-        className="w-full bg-gray-400 text-white font-bold py-3 px-6 rounded-xl hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 shadow-md hover:-translate-y-1"
+        className="w-full bg-gray-400 text-white font-bold py-3 px-6 rounded-xl hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 shadow-md"
       >
-        Cancelar
+        {t("editList.cancelButton")}
       </button>
     </div>
   );
