@@ -189,8 +189,13 @@ const App: React.FC = () => {
     setCurrentScreen("list-selection");
   };
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [showHelper, setShowHelper] = useState(false);
+
+  // Handler para alternar idioma
+  const handleToggleLocale = () => {
+    i18n.changeLanguage(i18n.language === "pt-BR" ? "en" : "pt-BR");
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 relative">
@@ -200,7 +205,27 @@ const App: React.FC = () => {
           <span className="font-bold text-lg text-indigo-700">RPG App</span>
           {/* Adicione outros itens de menu aqui se desejar */}
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center space-x-2">
+          {/* Ícone de troca de idioma */}
+          <button
+            onClick={handleToggleLocale}
+            className="text-3xl bg-transparent shadow-none p-0 m-0"
+            aria-label={
+              i18n.language === "pt-BR"
+                ? "Switch to English"
+                : "Mudar para Português"
+            }
+          >
+            {i18n.language === "pt-BR" ? (
+              <span role="img" aria-label="Bandeira do Reino Unido">
+                🇬🇧
+              </span>
+            ) : (
+              <span role="img" aria-label="Bandeira do Brasil">
+                🇧🇷
+              </span>
+            )}
+          </button>
           {/* Helper como item do menu, alinhado à direita e centralizado */}
           <button
             onClick={() => setShowHelper(true)}
