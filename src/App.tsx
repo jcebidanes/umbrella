@@ -4,7 +4,7 @@ import CreateListScreen from "./components/CreateListScreen";
 import EditListScreen from "./components/EditListScreen";
 import RandomizerScreen from "./components/RandomizerScreen";
 import CustomModal, { CustomModalProps } from "./components/CustomModal";
-import { RpgLists } from "./types/rpgTypes";
+import { RpgLists, RpgItem } from "./types/rpgTypes";
 import { defaultLists } from "./data/defaultLists";
 
 // Componente Principal da Aplicação
@@ -108,7 +108,7 @@ const App: React.FC = () => {
 
   const handleSaveNewList = async (
     name: string,
-    items: string
+    items: RpgItem[]
   ): Promise<void> => {
     if (!name.trim()) {
       await showModal("Erro", "O nome da lista é obrigatório!");
@@ -121,11 +121,10 @@ const App: React.FC = () => {
       );
       return;
     }
-
-    const newItemsParsed: string[] = items
-      .split("\n")
-      .map((item) => item.trim())
-      .filter((item) => item !== "");
+    // Filtra itens com nome vazio
+    const newItemsParsed: RpgItem[] = items.filter(
+      (item) => item.nome.trim() !== ""
+    );
     setAllRpgLists((prev: RpgLists) => ({
       ...prev,
       [name.trim()]: newItemsParsed,
@@ -141,7 +140,7 @@ const App: React.FC = () => {
     setCurrentScreen("edit-list");
   };
 
-  const handleSaveEditedList = (editedItems: string[]) => {
+  const handleSaveEditedList = (editedItems: RpgItem[]) => {
     setAllRpgLists((prev: RpgLists) => ({
       ...prev,
       [currentListName]: editedItems,
@@ -160,9 +159,9 @@ const App: React.FC = () => {
         if (newLists[referencingListName]) {
           // Garante que a lista referenciadora ainda exista
           newLists[referencingListName] = newLists[referencingListName].filter(
-            (item: string) => {
-              if (item.startsWith("LIST_REF:")) {
-                const refName: string = item
+            (item: RpgItem) => {
+              if (item.nome.startsWith("LIST_REF:")) {
+                const refName: string = item.nome
                   .substring("LIST_REF:".length)
                   .trim();
                 return refName !== listToDeleteName;

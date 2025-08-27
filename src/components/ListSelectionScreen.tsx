@@ -1,12 +1,11 @@
 import React, { useRef, useState } from "react";
-import { RpgLists } from "../types/rpgTypes";
 
-interface ListSelectionScreenProps {
+type ListSelectionScreenProps = {
   allRpgLists: RpgLists;
   onSelectList: (listName: string) => void;
   onCreateNewList: () => void;
   onImportLists: (lists: RpgLists) => void;
-}
+};
 
 function importListsFromFile(file: File): Promise<RpgLists> {
   return new Promise((resolve, reject) => {

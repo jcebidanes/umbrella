@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from "react";
+import { RpgLists, RpgItem } from "../types/rpgTypes";
 
 interface RandomizerScreenProps {
   currentListName: string;
-  allRpgLists: { [key: string]: string[] };
+  allRpgLists: RpgLists;
   onEditList: () => void;
   onBackToLists: () => void;
   showModal: (
@@ -10,6 +11,20 @@ interface RandomizerScreenProps {
     message: string,
     isConfirm?: boolean
   ) => Promise<boolean>;
+}
+
+function getWeightedRandomItem(items: RpgItem[]): RpgItem | null {
+  if (!items || items.length === 0) return null;
+  const weights = items.map((item) =>
+    item.peso !== undefined ? item.peso : 1
+  );
+  const totalWeight = weights.reduce((acc, w) => acc + w, 0);
+  let rnd = Math.random() * totalWeight;
+  for (let i = 0; i < items.length; i++) {
+    if (rnd < weights[i]) return items[i];
+    rnd -= weights[i];
+  }
+  return items[items.length - 1];
 }
 
 const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
@@ -28,46 +43,37 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
 
   const randomizeItem = useCallback(async () => {
     let currentPath: string[] = [currentListName];
-    let currentItems: string[] = allRpgLists[currentListName]
-      ? allRpgLists[currentListName].filter((item) => item.trim() !== "")
-      : [];
-    let finalItem: string = "";
-    let foundFinalItem: boolean = false;
-    let maxDepth: number = 10;
-
+    let foundFinalItem = false;
+    let finalItem: RpgItem | null = null;
+    let maxDepth = 10;
+    let currentItems: RpgItem[] = allRpgLists[currentListName] || [];
     while (!foundFinalItem && maxDepth > 0) {
-      maxDepth--;
-      if (currentItems.length === 0) {
+      if (!currentItems || currentItems.length === 0) {
         await showModal(
           "Erro",
-          `A lista "${
-            currentPath[currentPath.length - 1]
-          }" está vazia ou não existe. Não é possível sortear.`
+          `A lista "${currentListName}" está vazia ou não existe.`
         );
-        setResultText(
-          `Erro: Lista vazia em "${currentPath[currentPath.length - 1]}"`
-        );
+        setResultText("Erro: Sorteio falhou.");
         setResultDisplayClass(
           "mt-4 p-6 bg-red-400 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full"
         );
         return;
       }
-
-      const randomIndex: number = Math.floor(
-        Math.random() * currentItems.length
-      );
-      const selectedItem: string = currentItems[randomIndex];
-
-      if (selectedItem.startsWith("LIST_REF:")) {
-        const nextListName: string = selectedItem
+      const selectedItem = getWeightedRandomItem(currentItems);
+      if (!selectedItem) {
+        await showModal("Erro", "Não foi possível sortear um item.");
+        setResultText("Erro: Sorteio falhou.");
+        setResultDisplayClass(
+          "mt-4 p-6 bg-red-400 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full"
+        );
+        return;
+      }
+      if (selectedItem.nome.startsWith("LIST_REF:")) {
+        const nextListName: string = selectedItem.nome
           .substring("LIST_REF:".length)
           .trim();
         if (allRpgLists[nextListName]) {
           if (currentPath.includes(nextListName)) {
-            await showModal(
-              "Erro",
-              `Loop de referência detectado com a lista "${nextListName}". Não é possível sortear.`
-            );
             setResultText(`Erro: Loop de referência em "${nextListName}"`);
             setResultDisplayClass(
               "mt-4 p-6 bg-red-400 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full"
@@ -75,9 +81,8 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
             return;
           }
           currentPath.push(nextListName);
-          currentItems = allRpgLists[nextListName].filter(
-            (item) => item.trim() !== ""
-          );
+          currentItems = allRpgLists[nextListName] || [];
+          maxDepth--;
         } else {
           await showModal(
             "Erro",
@@ -96,7 +101,6 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
         foundFinalItem = true;
       }
     }
-
     if (!foundFinalItem) {
       await showModal(
         "Erro",
@@ -108,8 +112,7 @@ const RandomizerScreen: React.FC<RandomizerScreenProps> = ({
       );
       return;
     }
-
-    setResultText(`${currentPath.join(" -> ")} -> ${finalItem}`);
+    setResultText(`${currentPath.join(" -> ")} -> ${finalItem?.nome}`);
     setResultDisplayClass(
       "mt-4 p-6 bg-gradient-to-r from-green-400 to-emerald-500 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full"
     );

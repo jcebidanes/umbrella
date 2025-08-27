@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { RpgLists, RpgItem } from "../types/rpgTypes";
 
 interface EditListScreenProps {
   currentListName: string;
-  allRpgLists: { [key: string]: string[] };
-  onSaveList: (editedItems: string[]) => void;
+  allRpgLists: RpgLists;
+  onSaveList: (editedItems: RpgItem[]) => void;
   onDeleteList: (listToDeleteName: string, referencingLists: string[]) => void;
   onCancelEdit: () => void;
   showModal: (
@@ -21,47 +22,40 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
   onCancelEdit,
   showModal,
 }) => {
-  const [activeTab, setActiveTab] = useState<"text" | "json">("text");
+  const [activeTab, setActiveTab] = useState<"visual" | "text" | "json">(
+    "visual"
+  );
+  const [items, setItems] = useState<RpgItem[]>([]);
   const [editorContent, setEditorContent] = useState<string>("");
   const [jsonContent, setJsonContent] = useState<string>("");
   const [singleAddItemInput, setSingleAddItemInput] = useState<string>("");
+  const [singleAddItemPeso, setSingleAddItemPeso] = useState<string>("");
   const [listReferenceSelect, setListReferenceSelect] = useState<string>("");
 
   useEffect(() => {
     if (activeTab === "json") {
-      // Atualiza JSON ao mudar para aba JSON
-      try {
-        const arr = editorContent
-          .split("\n")
-          .map((item) => item.trim())
-          .filter((item) => item !== "");
-        setJsonContent(JSON.stringify(arr, null, 2));
-      } catch {
-        setJsonContent("[]");
-      }
-    } else {
-      // Atualiza texto ao mudar para aba texto
-      try {
-        const arr = JSON.parse(jsonContent);
-        if (Array.isArray(arr)) {
-          setEditorContent(arr.join("\n"));
-        }
-      } catch {
-        // ignora erro
-      }
+      setJsonContent(JSON.stringify(items, null, 2));
+    } else if (activeTab === "text") {
+      setEditorContent(items.map((item) => item.nome).join("\n"));
     }
-  }, [activeTab]);
+  }, [activeTab, items]);
 
   useEffect(() => {
-    // Preenche o editor de texto com a lista atual ao carregar a tela de edição
+    setItems(
+      allRpgLists[currentListName] ? [...allRpgLists[currentListName]] : []
+    );
     setEditorContent(
       allRpgLists[currentListName]
-        ? allRpgLists[currentListName].join("\n")
+        ? allRpgLists[currentListName].map((item) => item.nome).join("\n")
         : ""
+    );
+    setJsonContent(
+      allRpgLists[currentListName]
+        ? JSON.stringify(allRpgLists[currentListName], null, 2)
+        : "[]"
     );
   }, [currentListName, allRpgLists]);
 
-  // Preenche o dropdown de referências de lista
   const populateListReferenceSelectOptions = useCallback(() => {
     const otherListNames = Object.keys(allRpgLists)
       .filter((name) => name !== currentListName)
@@ -80,10 +74,15 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
 
   const handleAddSingleItem = () => {
     if (singleAddItemInput.trim()) {
-      setEditorContent(
-        (prev) => (prev ? prev + "\n" : "") + singleAddItemInput.trim()
-      );
+      setItems((prev: RpgItem[]) => [
+        ...prev,
+        {
+          nome: singleAddItemInput.trim(),
+          peso: singleAddItemPeso ? Number(singleAddItemPeso) : undefined,
+        },
+      ]);
       setSingleAddItemInput("");
+      setSingleAddItemPeso("");
     }
   };
 
@@ -95,40 +94,45 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
       );
       return;
     }
-    setEditorContent(
-      (prev) => (prev ? prev + "\n" : "") + `LIST_REF:${listReferenceSelect}`
-    );
+    setItems((prev: RpgItem[]) => [
+      ...prev,
+      { nome: `LIST_REF:${listReferenceSelect}` },
+    ]);
     setListReferenceSelect("");
   };
 
   const handleSave = async () => {
-    let editedItems: string[] = [];
+    let editedItems: RpgItem[] = [];
     if (activeTab === "json") {
       try {
         const arr = JSON.parse(jsonContent);
         if (!Array.isArray(arr)) throw new Error();
-        editedItems = arr.map((item: string) => String(item));
+        editedItems = arr.map((item: any) => ({
+          nome: String(item.nome),
+          peso: item.peso !== undefined ? Number(item.peso) : undefined,
+        }));
       } catch {
         await showModal(
           "Erro",
-          "O JSON não é válido ou não é um array de strings."
+          "O JSON não é válido ou não é um array de objetos com nome/peso."
         );
         return;
       }
-    } else {
+    } else if (activeTab === "text") {
       editedItems = editorContent
         .split("\n")
-        .map((item) => item.trim())
-        .filter((item) => item !== "");
+        .map((item: string) => ({ nome: item.trim() }))
+        .filter((item: RpgItem) => item.nome !== "");
+    } else {
+      editedItems = items;
     }
 
     // Validação de LIST_REF
     for (const item of editedItems) {
-      if (item.startsWith("LIST_REF:")) {
-        const referencedListName: string = item
+      if (item.nome.startsWith("LIST_REF:")) {
+        const referencedListName: string = item.nome
           .substring("LIST_REF:".length)
           .trim();
-        // Verifica se a lista referenciada existe E não é uma auto-referência
         if (
           !allRpgLists[referencedListName] &&
           referencedListName !== currentListName
@@ -137,7 +141,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
             "Erro de Validação",
             `A referência de lista "${referencedListName}" não existe. Por favor, corrija ou crie esta lista.`
           );
-          return; // Impede que a lista seja salva
+          return;
         }
       }
     }
@@ -152,7 +156,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
       if (Array.isArray(itemsInOtherList)) {
         if (
           itemsInOtherList.some(
-            (item) => item === `LIST_REF:${currentListName}`
+            (item: RpgItem) => item.nome === `LIST_REF:${currentListName}`
           )
         ) {
           referencingLists.push(otherListName);
@@ -187,8 +191,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
         {currentListName}
       </h2>
       <p className="text-gray-600 mb-4 text-center">
-        Edite os itens da lista (um item por linha) ou use as opções de adição
-        abaixo.
+        Edite os itens da lista, incluindo o peso para sorteio ponderado.
       </p>
 
       <div className="w-full bg-gray-50 p-4 rounded-xl shadow-inner mb-6 space-y-4">
@@ -197,7 +200,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
             htmlFor="singleAddItemInput"
             className="text-gray-700 text-sm font-semibold mb-2"
           >
-            Adicionar Item Simples:
+            Adicionar Item:
           </label>
           <div className="flex space-x-2">
             <input
@@ -207,6 +210,14 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
               placeholder="Nome do novo item"
               value={singleAddItemInput}
               onChange={(e) => setSingleAddItemInput(e.target.value)}
+            />
+            <input
+              type="number"
+              min="1"
+              className="w-20 p-3 border-2 border-gray-300 rounded-xl"
+              placeholder="Peso"
+              value={singleAddItemPeso}
+              onChange={(e) => setSingleAddItemPeso(e.target.value)}
             />
             <button
               onClick={handleAddSingleItem}
@@ -243,17 +254,20 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
         </div>
       </div>
 
-      <p className="text-gray-600 mb-2 text-center text-sm">
-        Edição em massa: um item por linha. (
-        <code className="bg-gray-200 p-1 rounded-md text-xs">
-          LIST_REF:Nome da Outra Lista
-        </code>{" "}
-        para referências)
-      </p>
       <div className="w-full flex mb-4">
         <button
-          onClick={() => setActiveTab("text")}
+          onClick={() => setActiveTab("visual")}
           className={`flex-1 py-2 font-bold rounded-tl-xl rounded-bl-xl ${
+            activeTab === "visual"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-gray-700"
+          }`}
+        >
+          Editor Visual
+        </button>
+        <button
+          onClick={() => setActiveTab("text")}
+          className={`flex-1 py-2 font-bold ${
             activeTab === "text"
               ? "bg-blue-600 text-white"
               : "bg-gray-200 text-gray-700"
@@ -272,26 +286,93 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
           JSON
         </button>
       </div>
-      {activeTab === "text" ? (
-        <>
-          {/* ...editor tradicional... */}
-          <textarea
-            id="itemListEditor"
-            className="w-full p-4 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400 h-64 resize-y mb-6 transition-all duration-200"
-            placeholder="Ex:\nEspada longa\nLIST_REF:Monstros Comuns\nDragão"
-            value={editorContent}
-            onChange={(e) => setEditorContent(e.target.value)}
-          ></textarea>
-        </>
-      ) : (
-        <>
-          <textarea
-            className="w-full p-4 border-2 border-gray-300 rounded-xl font-mono h-64 resize-y mb-6 transition-all duration-200"
-            value={jsonContent}
-            onChange={(e) => setJsonContent(e.target.value)}
-            placeholder="Cole ou edite o JSON da lista aqui..."
-          ></textarea>
-        </>
+
+      {activeTab === "visual" && (
+        <div className="w-full mb-6">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr>
+                <th className="p-2 border-b">Nome</th>
+                <th className="p-2 border-b">Peso</th>
+                <th className="p-2 border-b">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item: RpgItem, idx: number) => (
+                <tr key={idx}>
+                  <td className="p-2 border-b">
+                    <input
+                      type="text"
+                      className="w-full p-2 border rounded-lg"
+                      value={item.nome}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setItems((prev: RpgItem[]) =>
+                          prev.map((it, i) =>
+                            i === idx ? { ...it, nome: value } : it
+                          )
+                        );
+                      }}
+                    />
+                  </td>
+                  <td className="p-2 border-b">
+                    <input
+                      type="number"
+                      min="1"
+                      className="w-20 p-2 border rounded-lg"
+                      value={item.peso === undefined ? "" : item.peso}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setItems((prev: RpgItem[]) =>
+                          prev.map((it, i) =>
+                            i === idx
+                              ? {
+                                  ...it,
+                                  peso:
+                                    value === "" ? undefined : Number(value),
+                                }
+                              : it
+                          )
+                        );
+                      }}
+                    />
+                  </td>
+                  <td className="p-2 border-b">
+                    <button
+                      type="button"
+                      className="bg-red-400 text-white px-2 py-1 rounded-lg hover:bg-red-600"
+                      onClick={() =>
+                        setItems((prev: RpgItem[]) =>
+                          prev.filter((_, i) => i !== idx)
+                        )
+                      }
+                      disabled={items.length === 1}
+                    >
+                      ✕
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {activeTab === "text" && (
+        <textarea
+          id="itemListEditor"
+          className="w-full p-4 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400 h-64 resize-y mb-6 transition-all duration-200"
+          placeholder="Ex:\nEspada longa\nLIST_REF:Monstros Comuns\nDragão"
+          value={editorContent}
+          onChange={(e) => setEditorContent(e.target.value)}
+        ></textarea>
+      )}
+      {activeTab === "json" && (
+        <textarea
+          className="w-full p-4 border-2 border-gray-300 rounded-xl font-mono h-64 resize-y mb-6 transition-all duration-200"
+          value={jsonContent}
+          onChange={(e) => setJsonContent(e.target.value)}
+          placeholder="Cole ou edite o JSON da lista aqui..."
+        ></textarea>
       )}
 
       <button
