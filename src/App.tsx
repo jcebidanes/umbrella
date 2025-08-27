@@ -32,6 +32,18 @@ const App: React.FC = () => {
     onCancel: undefined,
   });
 
+  const [darkMode, setDarkMode] = useState(false);
+
+  // Handler para alternar idioma
+  const handleToggleLocale = () => {
+    i18n.changeLanguage(i18n.language === "pt-BR" ? "en" : "pt-BR");
+  };
+
+  // Handler para alternar tema
+  const handleToggleTheme = () => {
+    setDarkMode((prev) => !prev);
+  };
+
   // Função para exibir o modal customizado
   const showModal = useCallback(
     (
@@ -192,17 +204,26 @@ const App: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [showHelper, setShowHelper] = useState(false);
 
-  // Handler para alternar idioma
-  const handleToggleLocale = () => {
-    i18n.changeLanguage(i18n.language === "pt-BR" ? "en" : "pt-BR");
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50 relative">
+    <div
+      className={`min-h-screen ${
+        darkMode ? "bg-gray-900" : "bg-gray-50"
+      } relative transition-colors duration-300`}
+    >
       {/* Menu fixo no topo */}
-      <nav className="w-full flex items-center justify-between px-6 py-3 bg-white shadow-sm fixed top-0 left-0 z-40">
+      <nav
+        className={`w-full flex items-center justify-between px-6 py-3 ${
+          darkMode ? "bg-gray-800 shadow-lg" : "bg-white shadow-sm"
+        } fixed top-0 left-0 z-40 transition-colors duration-300`}
+      >
         <div className="flex items-center space-x-4">
-          <span className="font-bold text-lg text-indigo-700">RPG App</span>
+          <span
+            className={`font-bold text-lg ${
+              darkMode ? "text-yellow-300" : "text-indigo-700"
+            }`}
+          >
+            RPG App
+          </span>
           {/* Adicione outros itens de menu aqui se desejar */}
         </div>
         <div className="flex items-center space-x-2">
@@ -225,6 +246,18 @@ const App: React.FC = () => {
                 🇧🇷
               </span>
             )}
+          </button>
+          {/* Ícone de alternância de tema (lua) */}
+          <button
+            onClick={handleToggleTheme}
+            className={`text-2xl bg-transparent shadow-none p-0 m-0 ${
+              darkMode ? "text-yellow-300" : "text-indigo-700"
+            }`}
+            aria-label={darkMode ? t("theme.light") : t("theme.dark")}
+          >
+            <span role="img" aria-label="Alternar tema">
+              🌙
+            </span>
           </button>
           {/* Helper como item do menu, alinhado à direita e centralizado */}
           <button
@@ -287,10 +320,17 @@ const App: React.FC = () => {
         </div>
       )}
       {/* Espaço para o conteúdo principal abaixo do menu */}
-      <div className="flex flex-col items-center justify-center min-h-screen pt-20">
-        <div className={containerBase + " pt-4 min-h-screen"} role="main">
-          <div className={cardBase}>
-            <h1 className="sm:text-3xl text-2xl font-extrabold text-gray-800 mb-6 text-center">
+      <div
+        className={`flex flex-col items-center justify-center min-h-screen pt-20 ${
+          darkMode ? "bg-gray-900" : ""
+        }`}
+      >
+        <div
+          className={containerBase + ` pt-4 min-h-screen ${darkMode ? '' : ''}`}
+          role="main"
+        >
+          <div className={cardBase + (darkMode ? ' bg-gray-800 text-yellow-100' : '')}>
+            <h1 className={`sm:text-3xl text-2xl font-extrabold mb-6 text-center ${darkMode ? 'text-yellow-100' : 'text-gray-800'}`}>
               {t("appTitle")}
             </h1>
             {currentScreen === "list-selection" && (
@@ -301,12 +341,14 @@ const App: React.FC = () => {
                 onImportLists={(imported) =>
                   setAllRpgLists((prev) => ({ ...prev, ...imported }))
                 }
+                darkMode={darkMode}
               />
             )}
             {currentScreen === "create-list" && (
               <CreateListScreen
                 onSaveNewList={handleSaveNewList}
                 onCancel={handleCancelCreateNewList}
+                darkMode={darkMode}
               />
             )}
             {currentScreen === "randomizer" && (
@@ -316,6 +358,7 @@ const App: React.FC = () => {
                 onEditList={handleEditList}
                 onBackToLists={handleBackToLists}
                 showModal={showModal}
+                darkMode={darkMode}
               />
             )}
             {currentScreen === "edit-list" && (
@@ -326,6 +369,7 @@ const App: React.FC = () => {
                 onDeleteList={handleDeleteList}
                 onCancelEdit={handleCancelEdit}
                 showModal={showModal}
+                darkMode={darkMode}
               />
             )}
           </div>
