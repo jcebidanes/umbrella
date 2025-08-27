@@ -62,5 +62,11 @@
         "title": "Erro",
         "listNameRequired": "O nome da lista é obrigatório!",
         "listNameExists": "Já existe uma lista com o nome '{{name}}'. Escolha um nome diferente."
+    },
+    "helper": {
+        "title": "Como funciona a aplicação?",
+        "body": "1. Sorteio de itens:\n- Crie listas de elementos (personagens, aventuras, etc).\n- Para sortear, clique no botão de sorteio.\n- O sorteio é PONDERADO: itens com peso maior têm mais chance.\n\n2. Pesos ponderados:\n- Cada item tem um campo 'peso' (número inteiro).\n- O cálculo soma todos os pesos.\n- Probabilidade proporcional ao peso. Exemplo:\nAragorn (10), Gandalf (5), Frodo (2):\nTotal: 17\nAragorn: 10/17 ≈ 59%\nGandalf: 5/17 ≈ 29%\nFrodo: 2/17 ≈ 12%\n\n3. Referências entre listas:\n- Use 'LIST_REF:NomeDaLista' para referenciar outra lista.\n- O app busca o resultado na lista referenciada.\n\n4. Exemplos de JSON para upload:\n{\n  \"Personagens\": [\n    { \"nome\": \"Aragorn\", \"peso\": 10 },\n    { \"nome\": \"Gandalf\", \"peso\": 5 },\n    { \"nome\": \"Frodo\", \"peso\": 2 }\n  ],\n  \"Aventuras\": [\n    { \"nome\": \"LIST_REF:Personagens\", \"peso\": 1 },\n    { \"nome\": \"Missão Secreta\", \"peso\": 3 }\n  ]\n}\n\nLista única (apenas colar):\n[\n  { \"nome\": \"Aragorn\", \"peso\": 10 },\n  { \"nome\": \"Gandalf\", \"peso\": 5 },\n  { \"nome\": \"Frodo\", \"peso\": 2 }\n]\n",
+        "open": "Abrir explicação",
+        "close": "Fechar explicação"
     }
 }
