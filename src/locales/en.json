@@ -61,5 +61,11 @@
         "title": "Error",
         "listNameRequired": "List name is required!",
         "listNameExists": "A list named '{{name}}' already exists. Please choose a different name."
+    },
+    "helper": {
+        "title": "How does the app work?",
+        "body": "1. Item draw:\n- Create lists of elements (characters, adventures, etc).\n- To draw, click the draw button.\n- The draw is WEIGHTED: items with higher weight have more chance.\n\n2. Weighted chances:\n- Each item has a 'weight' field (integer).\n- The calculation sums all weights.\n- Probability is proportional to weight. Example:\nAragorn (10), Gandalf (5), Frodo (2):\nTotal: 17\nAragorn: 10/17 ≈ 59%\nGandalf: 5/17 ≈ 29%\nFrodo: 2/17 ≈ 12%\n\n3. List references:\n- Use 'LIST_REF:ListName' to reference another list.\n- The app fetches the result from the referenced list.\n\n4. JSON examples for upload:\n{\n  \"Personagens\": [\n    { \"nome\": \"Aragorn\", \"peso\": 10 },\n    { \"nome\": \"Gandalf\", \"peso\": 5 },\n    { \"nome\": \"Frodo\", \"peso\": 2 }\n  ],\n  \"Aventuras\": [\n    { \"nome\": \"LIST_REF:Personagens\", \"peso\": 1 },\n    { \"nome\": \"Missão Secreta\", \"peso\": 3 }\n  ]\n}\n\nSingle list (paste only):\n[\n  { \"nome\": \"Aragorn\", \"peso\": 10 },\n  { \"nome\": \"Gandalf\", \"peso\": 5 },\n  { \"nome\": \"Frodo\", \"peso\": 2 }\n]\n",
+        "open": "Open explanation",
+        "close": "Close explanation"
     }
 }
