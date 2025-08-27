@@ -1,3 +1,9 @@
+export const resultDisplayDefault =
+    "mt-4 p-6 bg-gradient-to-r from-blue-400 to-indigo-500 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full";
+export const resultDisplayError =
+    "mt-4 p-6 bg-red-400 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full";
+export const resultDisplaySuccess =
+    "mt-4 p-6 bg-gradient-to-r from-green-400 to-emerald-500 text-white text-center rounded-xl shadow-lg transform scale-100 opacity-100 flex items-center justify-center min-h-[80px] w-full";
 // Common Tailwind style strings for buttons, inputs, containers, etc.
 
 export const buttonBase =

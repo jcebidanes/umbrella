@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { buttonPrimary, buttonSecondary } from "../styles/commonStyles";
 
 export interface CustomModalProps {
   title: string;
@@ -25,16 +26,13 @@ const CustomModal: React.FC<CustomModalProps> = ({
         <h3 className="text-xl font-bold text-gray-800 mb-4">{title}</h3>
         <p className="text-gray-700 mb-6">{message}</p>
         <div className="flex justify-end space-x-4">
-          <button
-            onClick={onConfirm}
-            className="px-4 py-2 rounded-md font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
-          >
+          <button onClick={onConfirm} className={"px-4 py-2 " + buttonPrimary}>
             {t("modal.ok")}
           </button>
           {isConfirm && (
             <button
               onClick={onCancel}
-              className="px-4 py-2 rounded-md font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 transition-colors duration-200"
+              className={"px-4 py-2 " + buttonSecondary}
             >
               {t("modal.cancel")}
             </button>
