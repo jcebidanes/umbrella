@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { RpgLists } from "../types/rpgTypes";
 
 type ListSelectionScreenProps = {
   allRpgLists: RpgLists;
