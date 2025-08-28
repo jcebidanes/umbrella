@@ -185,7 +185,9 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
   return (
     <div id="edit-list-screen" className={containerBase}>
       <h2
-        className={`text-2xl font-bold mb-4 text-center ${darkMode ? 'text-yellow-100' : 'text-gray-800'}`}
+        className={`text-2xl font-bold mb-4 text-center ${
+          darkMode ? "text-yellow-100" : "text-gray-800"
+        }`}
       >
         {t("editList.title")}
       </h2>

@@ -326,11 +326,19 @@ const App: React.FC = () => {
         }`}
       >
         <div
-          className={containerBase + ` pt-4 min-h-screen ${darkMode ? '' : ''}`}
+          className={containerBase + ` pt-4 min-h-screen ${darkMode ? "" : ""}`}
           role="main"
         >
-          <div className={cardBase + (darkMode ? ' bg-gray-800 text-yellow-100' : '')}>
-            <h1 className={`sm:text-3xl text-2xl font-extrabold mb-6 text-center ${darkMode ? 'text-yellow-100' : 'text-gray-800'}`}>
+          <div
+            className={
+              cardBase + (darkMode ? " bg-gray-800 text-yellow-100" : "")
+            }
+          >
+            <h1
+              className={`sm:text-3xl text-2xl font-extrabold mb-6 text-center ${
+                darkMode ? "text-yellow-100" : "text-gray-800"
+              }`}
+            >
               {t("appTitle")}
             </h1>
             {currentScreen === "list-selection" && (

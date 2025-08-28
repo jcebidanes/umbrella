@@ -104,7 +104,11 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
       id="list-selection-screen"
       className={containerBase + " justify-center"}
     >
-      <p className={`mb-6 text-center text-base sm:text-lg ${darkMode ? 'text-yellow-100' : 'text-gray-600'}`}>
+      <p
+        className={`mb-6 text-center text-base sm:text-lg ${
+          darkMode ? "text-yellow-100" : "text-gray-600"
+        }`}
+      >
         {t("listSelection.instruction")}
       </p>
       <div id="list-buttons-container" className="w-full space-y-4 mb-6">
@@ -150,17 +154,39 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
         {t("listSelection.pasteJson")}
       </button>
       {showPasteModal && (
-        <div className={`fixed inset-0 flex items-center justify-center z-50 ${darkMode ? 'bg-gray-900 bg-opacity-80' : 'bg-gray-700 bg-opacity-60'}`}>
+        <div
+          className={`fixed inset-0 flex items-center justify-center z-50 ${
+            darkMode ? "bg-gray-900 bg-opacity-80" : "bg-gray-700 bg-opacity-60"
+          }`}
+        >
           <div
-            className={cardBase + ` max-w-md w-full overflow-y-auto ${darkMode ? 'bg-gray-800 border border-yellow-100 text-yellow-100' : ''}`}
+            className={
+              cardBase +
+              ` max-w-md w-full overflow-y-auto ${
+                darkMode
+                  ? "bg-gray-800 border border-yellow-100 text-yellow-100"
+                  : ""
+              }`
+            }
             role="dialog"
             aria-modal="true"
           >
-            <h3 className={`text-xl font-bold mb-4 text-center ${darkMode ? 'text-yellow-100' : 'text-gray-800'}`}>
+            <h3
+              className={`text-xl font-bold mb-4 text-center ${
+                darkMode ? "text-yellow-100" : "text-gray-800"
+              }`}
+            >
               {t("listSelection.pasteTitle")}
             </h3>
             <textarea
-              className={inputBase + ` mb-4 text-base sm:text-lg ${darkMode ? 'bg-gray-900 text-yellow-100 border-yellow-300' : ''}`}
+              className={
+                inputBase +
+                ` mb-4 text-base sm:text-lg ${
+                  darkMode
+                    ? "bg-gray-900 text-yellow-100 border-yellow-300"
+                    : ""
+                }`
+              }
               rows={8}
               value={pastedJson}
               onChange={(e) => setPastedJson(e.target.value)}
@@ -169,19 +195,25 @@ const ListSelectionScreen: React.FC<ListSelectionScreenProps> = ({
             <div className="flex justify-end space-x-2">
               <button
                 onClick={handlePasteImport}
-                className={buttonSuccess + " px-4 py-2 rounded-md font-semibold"}
+                className={
+                  buttonSuccess + " px-4 py-2 rounded-md font-semibold"
+                }
               >
                 {t("listSelection.import")}
               </button>
               <button
                 onClick={() => setShowPasteModal(false)}
-                className={`px-4 py-2 rounded-md font-semibold ${darkMode ? 'text-yellow-100 bg-gray-700 hover:bg-gray-600' : 'text-gray-700 bg-gray-200 hover:bg-gray-300'}`}
+                className={`px-4 py-2 rounded-md font-semibold ${
+                  darkMode
+                    ? "text-yellow-100 bg-gray-700 hover:bg-gray-600"
+                    : "text-gray-700 bg-gray-200 hover:bg-gray-300"
+                }`}
                 aria-label={t("listSelection.closeModal")}
               >
                 <span className="sr-only">{t("listSelection.closeModal")}</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className={`h-5 w-5 ${darkMode ? 'text-yellow-100' : ''}`}
+                  className={`h-5 w-5 ${darkMode ? "text-yellow-100" : ""}`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
