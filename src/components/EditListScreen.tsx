@@ -41,6 +41,7 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
   const [singleAddItemInput, setSingleAddItemInput] = useState<string>("");
   const [singleAddItemPeso, setSingleAddItemPeso] = useState<string>("");
   const [listReferenceSelect, setListReferenceSelect] = useState<string>("");
+  const [showExplanation, setShowExplanation] = useState(false);
 
   useEffect(() => {
     if (activeTab === "json") {
@@ -191,7 +192,6 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
       >
         {t("editList.title")}
       </h2>
-      <p className="text-gray-600 mb-4 text-center">{t("editList.title")}</p>
 
       <div
         className={
