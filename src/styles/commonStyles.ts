@@ -31,7 +31,7 @@ export const inputSmall =
 export const containerBase =
     "flex flex-col items-center p-2 sm:p-4 max-w-full";
 export const cardBase =
-    "bg-white p-2 sm:p-8 rounded-2xl shadow-xl max-w-lg w-full transform transition-all duration-300 hover:shadow-2xl";
+    "p-2 sm:p-8 rounded-2xl shadow-xl max-w-lg w-full transform transition-all duration-300 hover:shadow-2xl";
 
 export const tableBase =
     "w-full text-left border-collapse min-w-[320px] max-w-full";
