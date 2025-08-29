@@ -250,7 +250,7 @@ const App: React.FC = () => {
           {/* Ícone de alternância de tema (lua) */}
           <button
             onClick={handleToggleTheme}
-            className={`text-2xl bg-transparent shadow-none p-0 m-0 ${
+            className={`text-3xl bg-transparent shadow-none p-0 m-0 ${
               darkMode ? "text-yellow-300" : "text-indigo-700"
             }`}
             aria-label={darkMode ? t("theme.light") : t("theme.dark")}

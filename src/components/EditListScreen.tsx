@@ -193,7 +193,16 @@ const EditListScreen: React.FC<EditListScreenProps> = ({
       </h2>
       <p className="text-gray-600 mb-4 text-center">{t("editList.title")}</p>
 
-      <div className={cardBase + " mb-6 space-y-4 bg-gray-50 shadow-inner"}>
+      <div
+        className={
+          cardBase +
+          ` mb-6 space-y-4 shadow-inner ${
+            darkMode
+              ? "bg-gray-800 border border-yellow-100 text-yellow-100"
+              : "bg-gray-50"
+          }`
+        }
+      >
         <div className="flex flex-col">
           <label
             htmlFor="singleAddItemInput"
